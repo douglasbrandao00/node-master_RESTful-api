@@ -11,7 +11,9 @@ const server = http.createServer((req, res) => {
     .pathname
     .replace(/^\/+|\/+$/g, '')
 
-  console.log(`Request recived on path ${path}`)
+  const method = req.method.toUpperCase()
+
+  console.log(`Request recived on path ${path} on method ${method}`)
 
   res.end('Racionais 4:3\n')
 })
