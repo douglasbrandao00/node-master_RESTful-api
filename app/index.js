@@ -1,5 +1,6 @@
 const http = require('http')
 const url = require('url')
+const StringDecoder = require('string_decoder').StringDecoder
 
 const port = 3000
 
@@ -11,13 +12,27 @@ const server = http.createServer((req, res) => {
     .replace(/^\/+|\/+$/g, '')
 
   const queryParams = parseUrl.query
-  console.log(queryParams)
 
   const method = req.method.toUpperCase()
 
-  console.log(`Request on path ${path} on method ${method} on query ${JSON.stringify(queryParams)}`)
+  const header = req.headers
 
-  res.end('Racionais 4:3\n')
+  const decoder = new StringDecoder('utf-8')
+  let buffer = ''
+
+  req.on('data', (data) => {
+    buffer += decoder.write(data)
+  })
+
+  req.on('end', () => {
+    buffer += decoder.end()
+    
+    console.log(`that: ${buffer}`)
+    res.end('Racionais 4:3\n')
+
+  })
+
+
 })
 
 
